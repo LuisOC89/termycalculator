@@ -4,6 +4,7 @@ ACCEPTED_RESPONSES=["y", "Y", "n", "N"]
 VALID_OPERATORS="+-:/*"
 VALID_DIGITS="0123456789"
 PRIORITY_OPERATORS="/*:"
+PARENTHESIS_SIMBOLS = "()"
 
 def banner(text, icon_upper=None, icon_lower=None):
     '''Increases visibility of text'''
@@ -26,46 +27,77 @@ def check_surroundings_VALID_OPERATORS(instructions):
                 return False
     return True
 
-def check_first_last_values_numbers(instructions):
-    if instructions[0] not in VALID_DIGITS or instructions[-1] not in VALID_DIGITS:
+def check_first_last_values(instructions):
+    if instructions[0] not in VALID_DIGITS+PARENTHESIS_SIMBOLS or instructions[-1] not in VALID_DIGITS+PARENTHESIS_SIMBOLS:
         print("\n~~~~~~~ERROR: First and last values have to be numbers :/ ~~~~~~~~\n")
         return False
     return True
 
-def check_no_divisions_by_0(instructions):
-    for char_index in range(len(instructions)):
-        if instructions[char_index] == "/" or instructions[char_index] == ":" :
-            if instructions[char_index + 1] == "0" :   
-                print("\n~~~~~~~ERROR: Divisions by 0 are INFINITEEEEEE :/ ~~~~~~~~\n")
-                return False
+def check_no_empty_parenthesis(instructions):
+    if "()" in instructions:
+        print("\n~~~~~~~ERROR: Empty parenthesis detected :/ ~~~~~~~~\n")
+        return False
     return True
+
+def check_equal_open_close_parenthesis(instructions):
+    qty_open_parenthesis = instructions.count('(')
+    qty_closing_parenthesis = instructions.count(')')
+    if qty_open_parenthesis != qty_closing_parenthesis:
+        print("\n~~~~~~~ERROR: Extra parenthesis character detected :/ ~~~~~~~~\n")
+        return False
+    return True
+
+def check_surroundings_and_order_parenthesis(instructions):
+    count_for_order = 0
+    for char_index in range(len(instructions)):
+        if instructions[char_index] == ")" :
+            count_for_order -= 1
+        elif instructions[char_index] == "(" :
+            count_for_order += 1
+        if count_for_order < 1:
+            print("\n~~~~~~~ERROR: Closing parenthesis before open parenthesis found :/ ~~~~~~~~\n")
+            return False
+
+        if instructions[char_index] == "(":
+            if char_index == 0:
+                if instructions[char_index+1] in VALID_OPERATORS:
+                    return False
+            elif char_index != 0:
+                if instructions[char_index+1] in VALID_OPERATORS or instructions[char_index-1] in VALID_DIGITS:
+                    return False
+
+        elif instructions[char_index] == ")":
+            if char_index == len(instructions) - 1:
+                if instructions[char_index-1] in VALID_OPERATORS:
+                    return False
+            elif char_index != len(instructions) - 1:
+                if instructions[char_index-1] in VALID_OPERATORS or instructions[char_index+1] in VALID_DIGITS:
+                    return False
+    return True
+            
 
 
 def make_list(instructions):
-    list_numbers = []
-    list_operators = []
     list_calculus = []
     index = 0
     for char_index in range(len(instructions)):
         if instructions[char_index] in VALID_OPERATORS :
-            list_numbers.append(int(instructions[index:char_index]))
-            list_operators.append(instructions[char_index])    # OK
             list_calculus.append(int(instructions[index:char_index]))
             list_calculus.append(instructions[char_index])    # OK
             index = char_index + 1
         # LAST NUMBER
         if char_index == len(instructions) - 1 :
-            list_numbers.append(int(instructions[index:len(instructions)]))
             list_calculus.append(int(instructions[index:len(instructions)]))
-        # index += 1
-    print("List_numbers: "+str(list_numbers))
-    print("List_operators: "+str(list_operators))     # OK
     print("List_calculus: "+str(list_calculus))
-    return list_numbers, list_operators, list_calculus
+    return list_calculus
 
 def make_operation(number1, number2, operator):
     if operator == ":" or operator == "/" :
-        reduced_member = number1/number2
+        if number2 != 0 :
+            reduced_member = number1/number2  
+        else: 
+            print("\n~~~~~~~ERROR: Divisions by 0 are INFINITEEEEEE :/ ~~~~~~~~\n")
+            reduced_member = "ERROR"
     elif operator == "*" :
         reduced_member = number1*number2
     elif operator == "+" :
@@ -84,6 +116,8 @@ def reduce_members(list_calculus):
                 print("Operator index + 1: {}, value: {}".format(operator_index+1, list_calculus[operator_index+1]))
                 if list_calculus[operator_index] in PRIORITY_OPERATORS :
                     temp = make_operation(list_calculus[operator_index-1],list_calculus[operator_index+1],list_calculus[operator_index])
+                    if temp == "ERROR":
+                        break
                     list_calculus[operator_index-1] = temp
                     del list_calculus[operator_index:operator_index+1+1] # Plus extra, sublist structure: [initial:final)
                     print("List: "+str(list_calculus))
@@ -108,9 +142,9 @@ def menu():
     while True:
         # Always visibility of application name and limitations (PSQL)
         if counter%2 == 0:
-            banner("Calculathis: Calculator of simple expressions", "T", "T")
+            banner("termycalculator: Calculator of simple expressions", "T", "T")
             # print("   Look out!: Don't leave any spaces in your expression :/   ")
-        banner("OPTIONS: (1) Insert mathematical operation | (2) Quit", "‾", "_")
+        banner("OPTIONS: (1) Insert expression | (2) Help | (3) Quit", "‾", "_")
            
         user_choice = input("\nPlease select an a option: ")
         
@@ -121,20 +155,25 @@ def menu():
                 validator = check_valid_values(math_instructions) 
                 if not validator:
                     break
-                validator = check_first_last_values_numbers(math_instructions)  
+                validator = check_first_last_values(math_instructions)  
                 if not validator:
                     break
                 validator = check_surroundings_VALID_OPERATORS(math_instructions)
                 if not validator:
                     break
-                validator = check_no_divisions_by_0(math_instructions)
+                validator = check_no_empty_parenthesis(math_instructions)
                 if not validator:
                     break
-                # validator = check_no_divisions_by_0(math_instructions)
-                # if not validator:
-                #     break
-                numbers, operators, calculus = make_list(math_instructions)
-                print("Numbers: {n}, Operators: {o}, List: {c}".format(n=numbers, o=operators, c=calculus))
+                validator = check_equal_open_close_parenthesis(math_instructions)
+                if not validator:
+                    break
+                validator = check_surroundings_and_order_parenthesis(math_instructions)
+                if not validator:
+                    break
+                # numbers, operators, calculus = make_list(math_instructions)
+                # print("Numbers: {n}, Operators: {o}, List: {c}".format(n=numbers, o=operators, c=calculus))
+                calculus = make_list(math_instructions)
+                print("List: {}".format(calculus))
                 # make_list_operators(math_instructions)
                 
                 result = reduce_members(calculus) 
@@ -148,12 +187,11 @@ def menu():
                 #             reduced_value = reduce_members(numbers[operator_index+1], numbers.pop(operator_index+2), operators.pop(operator_index+1))
                 #             numbers[operator_index+1] = reduced_value
 
-
-                
-
-
         elif user_choice == "2":
-            banner("DunBoMS finished by user", 'x', 'x')
+            pass
+                
+        elif user_choice == "3":
+            banner("termycalculator finished by user", 'x', 'x')
             sys.exit()
         else:
             print("\n~~~~~~~ERROR: Invalid choice :/, try again~~~~~~~\n")

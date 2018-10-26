@@ -14,7 +14,11 @@ access the project's folder.
 1. You will be able to enter mathematical expressions like if you were using a calculator.
 2. Operations are limited to sum, multiplication, division (and operations inside parenthesis).
 3. Decimal numbers will have to be entered in fractional form. Ex: `1/2` instead of `0.5` .
+4. It is ok if you leave blank spaces. The program will put your numbers together for you.
 
 ### Examples:
 `Calculate this: 12+34/2+1+2*5-30`  
-`Result: 10.0`
+`Result: 10.0`  
+  
+`Calculate this: 1 2 + 4     4`  
+`Result: 56`
