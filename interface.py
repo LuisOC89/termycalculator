@@ -14,7 +14,7 @@ def banner(text, icon_upper=None, icon_lower=None):
 
 def check_valid_values(instructions):
     for char_index in range(len(instructions)):
-        if instructions[char_index] not in VALID_OPERATORS+VALID_DIGITS:
+        if instructions[char_index] not in VALID_OPERATORS+VALID_DIGITS+PARENTHESIS_SIMBOLS:
             print("\n~~~~~~~ERROR: Invalid simbol or number :/ ~~~~~~~~\n")   
             return False
     return True
@@ -54,24 +54,28 @@ def check_surroundings_and_order_parenthesis(instructions):
             count_for_order -= 1
         elif instructions[char_index] == "(" :
             count_for_order += 1
-        if count_for_order < 1:
+        if count_for_order < 0:
             print("\n~~~~~~~ERROR: Closing parenthesis before open parenthesis found :/ ~~~~~~~~\n")
             return False
 
         if instructions[char_index] == "(":
             if char_index == 0:
                 if instructions[char_index+1] in VALID_OPERATORS:
+                    print("\n~~~~~~~ERROR: Invalid value to the right of '(' :/ ~~~~~~~~\n")
                     return False
             elif char_index != 0:
                 if instructions[char_index+1] in VALID_OPERATORS or instructions[char_index-1] in VALID_DIGITS:
+                    print("\n~~~~~~~ERROR: Invalid value next to '(' :/ ~~~~~~~~\n")
                     return False
 
         elif instructions[char_index] == ")":
             if char_index == len(instructions) - 1:
                 if instructions[char_index-1] in VALID_OPERATORS:
+                    print("\n~~~~~~~ERROR: Invalid value to the left of ')' :/ ~~~~~~~~\n")
                     return False
             elif char_index != len(instructions) - 1:
                 if instructions[char_index-1] in VALID_OPERATORS or instructions[char_index+1] in VALID_DIGITS:
+                    print("\n~~~~~~~ERROR: Invalid value next to ')' :/ ~~~~~~~~\n")
                     return False
     return True
             
@@ -81,13 +85,16 @@ def make_list(instructions):
     list_calculus = []
     index = 0
     for char_index in range(len(instructions)):
-        if instructions[char_index] in VALID_OPERATORS :
-            list_calculus.append(int(instructions[index:char_index]))
+        print("char_index: {}, value: {}".format(char_index, instructions[char_index]))
+        if instructions[char_index] in VALID_OPERATORS+PARENTHESIS_SIMBOLS:
+            if instructions[index:char_index] != '':
+                list_calculus.append(int(instructions[index:char_index]))
             list_calculus.append(instructions[char_index])    # OK
             index = char_index + 1
         # LAST NUMBER
         if char_index == len(instructions) - 1 :
-            list_calculus.append(int(instructions[index:len(instructions)]))
+            if instructions[index:len(instructions)] != '':
+                list_calculus.append(int(instructions[index:len(instructions)]))
     print("List_calculus: "+str(list_calculus))
     return list_calculus
 
@@ -120,7 +127,7 @@ def reduce_members(list_calculus):
                         break
                     list_calculus[operator_index-1] = temp
                     del list_calculus[operator_index:operator_index+1+1] # Plus extra, sublist structure: [initial:final)
-                    print("List: "+str(list_calculus))
+                    print("List_reduce: "+str(list_calculus))
                     break
                 else:
                     pass
@@ -129,12 +136,40 @@ def reduce_members(list_calculus):
                 temp = make_operation(list_calculus[operator_index-1],list_calculus[operator_index+1],list_calculus[operator_index])
                 list_calculus[operator_index-1] = temp
                 del list_calculus[operator_index:operator_index+1+1] # Plus extra, sublist structure: [initial:final)
-                print("List: "+str(list_calculus))
+                print("List_reduce: "+str(list_calculus))
                 break
         if len(list_calculus) == 1:
             return list_calculus[0]
         else:
             pass
+        
+def calculate(main_list):
+    while True:
+        start_parenthesis = 0
+        end_parenthesis = 0
+        for index in range(len(main_list)):
+            if '(' in main_list:
+                if main_list[index] == "(":
+                    start_parenthesis = index
+                if main_list[index] == ")":
+                    end_parenthesis = index
+                if end_parenthesis:
+                    print("Parenthesis: {}".format(main_list[start_parenthesis+1:end_parenthesis]))
+                    temp = reduce_members(main_list[start_parenthesis+1:end_parenthesis])
+                    main_list[start_parenthesis] = temp
+                    del main_list[start_parenthesis+1:end_parenthesis+1] # Plus extra, sublist structure: [initial:final)
+                    print("List_calculate h: "+str(main_list))
+                    break
+            else:
+                main_list = reduce_members(main_list)
+                print("List_calculate j: "+str(main_list))
+                print("Type List_calculate j: "+str(type(main_list)))
+                if str(type(main_list)) == "<class 'int'>":
+                    return main_list
+                elif str(type(main_list)) == "<class 'float'>":
+                    return round(main_list, 2)
+                else:
+                    pass
 
 def menu():
     '''User interface'''
@@ -150,7 +185,7 @@ def menu():
         
         if user_choice == "1":
             while True:
-                math_expressions = input("  Insert mathematical expression: ")
+                math_expressions = input(" Calculate this: ")
                 math_instructions = math_expressions.replace(" ", "")
                 validator = check_valid_values(math_instructions) 
                 if not validator:
@@ -176,7 +211,9 @@ def menu():
                 print("List: {}".format(calculus))
                 # make_list_operators(math_instructions)
                 
-                result = reduce_members(calculus) 
+                result=calculate(calculus)
+
+                # result = reduce_members(calculus) 
 
                 print("Final result: {}".format(result))
 
