@@ -1,5 +1,7 @@
 import sys
 
+from helpers import troll_face
+
 ACCEPTED_RESPONSES=["y", "Y", "n", "N"]
 VALID_OPERATORS="+-:/*"
 VALID_DIGITS="0123456789"
@@ -79,8 +81,6 @@ def check_surroundings_and_order_parenthesis(instructions):
                     return False
     return True
             
-
-
 def make_list(instructions):
     list_calculus = []
     index = 0
@@ -103,8 +103,9 @@ def make_operation(number1, number2, operator):
         if number2 != 0 :
             reduced_member = number1/number2  
         else: 
+            print(troll_face)
             print("\n~~~~~~~ERROR: Divisions by 0 are INFINITEEEEEE :/ ~~~~~~~~\n")
-            reduced_member = "ERROR"
+            menu()
     elif operator == "*" :
         reduced_member = number1*number2
     elif operator == "+" :
@@ -123,8 +124,6 @@ def reduce_members(list_calculus):
                 print("Operator index + 1: {}, value: {}".format(operator_index+1, list_calculus[operator_index+1]))
                 if list_calculus[operator_index] in PRIORITY_OPERATORS :
                     temp = make_operation(list_calculus[operator_index-1],list_calculus[operator_index+1],list_calculus[operator_index])
-                    if temp == "ERROR":
-                        break
                     list_calculus[operator_index-1] = temp
                     del list_calculus[operator_index:operator_index+1+1] # Plus extra, sublist structure: [initial:final)
                     print("List_reduce: "+str(list_calculus))
@@ -205,24 +204,13 @@ def menu():
                 validator = check_surroundings_and_order_parenthesis(math_instructions)
                 if not validator:
                     break
-                # numbers, operators, calculus = make_list(math_instructions)
-                # print("Numbers: {n}, Operators: {o}, List: {c}".format(n=numbers, o=operators, c=calculus))
+                
                 calculus = make_list(math_instructions)
                 print("List: {}".format(calculus))
-                # make_list_operators(math_instructions)
                 
                 result=calculate(calculus)
 
-                # result = reduce_members(calculus) 
-
                 print("Final result: {}".format(result))
-
-                # while len(numbers) > 1:
-                #     print("Numbers: {n}, Operators: {o}".format(n=numbers, o=operators))
-                #     for operator_index in range(len(operators)):
-                #         if operators[operator_index+1] in PRIORITY_OPERATORS:
-                #             reduced_value = reduce_members(numbers[operator_index+1], numbers.pop(operator_index+2), operators.pop(operator_index+1))
-                #             numbers[operator_index+1] = reduced_value
 
         elif user_choice == "2":
             pass
@@ -236,14 +224,5 @@ def menu():
         counter += 1
         input("Press Enter to continue...")
 
-
-#To run this file by itself
 if __name__=="__main__":
-    print("\n")
     menu()
-
-# if keep_previous_log_files in ACCEPTED_RESPONSES:
-                            #     keep_log_files(keep_previous_log_files)
-                            #     break
-                            # else:
-                            #     print("\n~~~~~~~ERROR: Invalid choice :/, try again~~~~~~~\n")

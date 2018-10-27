@@ -28,3 +28,7 @@ access the project's folder.
 
 `Calculate this: 23+(1)+6+(87)-32/(9*5)`  
 `Result: 116.29`
+
+##### Division by zero  
+`Calculate this: 12+32/(1-1)`  
+`Result: Surprise? Check yourself`
