@@ -22,3 +22,9 @@ access the project's folder.
   
 `Calculate this: 1 2 + 4     4`  
 `Result: 56`
+
+`Calculate this: (((12+3/(4/5))-32)+5)`  
+`Result: -11.25`
+
+`Calculate this: 23+(1)+6+(87)-32/(9*5)`  
+`Result: 116.29`
