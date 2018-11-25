@@ -11,3 +11,4 @@ EMPTY_PARENTHESIS =             "~~~~~~~~~~~~ ERROR: Empty parenthesis detected 
 FIRST_LAST_VALUES_PAR =         "~ ERROR: 1st and last values have to be numbers or parenthesis ~~\n"
 OPERATORS_TOGETHER =            "~~~~~~~~~~~ ERROR: Two operators can not go together :/ ~~~~~~~~~\n"
 INVALID_SYMBOL_OR_VALUE =       "~~~~~~~ ERROR: Invalid symbol or value in expression :/ ~~~~~~~~~\n"
+NO_EXPRESSION =                 "\n~~ ERROR: No expression entered. Next time enter an expression ~~\n"

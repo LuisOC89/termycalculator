@@ -5,7 +5,7 @@ import sys
 import argparse
 
 from utils.helpers import APP_TITLE, APP_OPTIONS, APP_FINISHED
-from utils.errors import INVALID_CHOICE
+from utils.errors import INVALID_CHOICE, NO_EXPRESSION
 from utils.validation import check_valid_values, check_surroundings_VALID_OPERATORS, check_first_last_values, check_no_empty_parenthesis, check_equal_open_close_parenthesis, check_surroundings_and_order_parenthesis
 from process_expression import make_list, calculate
 from utils.help_guide_user import SCOPE, EXAMPLES, SEE_STEPS_OPTION
@@ -29,9 +29,12 @@ def menu(see_steps):
         
         if user_choice == "1":
             while True:
-                math_expressions = input("Calculate this: ")
+                math_expression = input("Calculate this: ")
+                if str(math_expression) == '':
+                    print(NO_EXPRESSION)
+                    break
                 print("")
-                math_instructions = math_expressions.replace(" ", "")
+                math_instructions = math_expression.replace(" ", "")
 
                 validator = check_valid_values(math_instructions) 
                 if not validator:
