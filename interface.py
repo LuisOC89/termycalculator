@@ -4,14 +4,8 @@
 
 import sys
 
-from helpers import TROLL_FACE
+from helpers import *
 from errors import *
-
-ACCEPTED_RESPONSES=["y", "Y", "n", "N"]
-VALID_OPERATORS="+-:/*"
-VALID_DIGITS="0123456789"
-PRIORITY_OPERATORS="/*:"
-PARENTHESIS_SIMBOLS = "()"
 
 def banner(text, icon_upper=None, icon_lower=None):
     '''Makes nice signs with text'''
@@ -23,7 +17,7 @@ def check_valid_values(instructions):
     '''Checks that the expresion contains just valid values'''
     for char_index in range(len(instructions)):
         if instructions[char_index] not in VALID_OPERATORS+VALID_DIGITS+PARENTHESIS_SIMBOLS:
-            print("\n~~~~~~~ERROR: Invalid simbol or number :/ ~~~~~~~~\n")   
+            print(INVALID_SYMBOL_OR_VALUE)   
             return False
     return True
            
@@ -32,21 +26,21 @@ def check_surroundings_VALID_OPERATORS(instructions):
     for char_index in range(len(instructions)):
         if instructions[char_index] in VALID_OPERATORS:
             if instructions[char_index - 1] in VALID_OPERATORS or instructions[char_index + 1] in VALID_OPERATORS:   
-                print("\n~~~~~~~ERROR: Two operators can not go together :/ ~~~~~~~~\n")
+                print(OPERATORS_TOGETHER)
                 return False
     return True
 
 def check_first_last_values(instructions):
     '''CHecks the first and last values to be either digit or parenthesis sign'''
     if instructions[0] not in VALID_DIGITS+PARENTHESIS_SIMBOLS or instructions[-1] not in VALID_DIGITS+PARENTHESIS_SIMBOLS:
-        print("\n~~~~~~~ERROR: First and last values have to be numbers or parenthesis :/ ~~~~~~~~\n")
+        print(FIRST_LAST_VALUES_PAR)
         return False
     return True
 
 def check_no_empty_parenthesis(instructions):
     '''Looks for empty parenthesis: ()'''
     if "()" in instructions:
-        print("\n~~~~~~~ERROR: Empty parenthesis detected :/ ~~~~~~~~\n")
+        print(EMPTY_PARENTHESIS)
         return False
     return True
 
@@ -55,7 +49,7 @@ def check_equal_open_close_parenthesis(instructions):
     qty_open_parenthesis = instructions.count('(')
     qty_closing_parenthesis = instructions.count(')')
     if qty_open_parenthesis != qty_closing_parenthesis:
-        print("\n~~~~~~~ERROR: Extra or missing parenthesis detected :/ ~~~~~~~~\n")
+        print(EXTRA_OR_MISSING_PAR)
         return False
     return True
 
@@ -77,25 +71,25 @@ def check_surroundings_and_order_parenthesis(instructions):
         elif instructions[char_index] == "(" :
             count_for_order += 1
         if count_for_order < 0:
-            print("\n~~~~~~~ERROR: Closing parenthesis before open parenthesis found :/ ~~~~~~~~\n")
+            print(WRONG_ORDER_PARENTHESIS)
             return False
 
         if instructions[char_index] == "(":
             if instructions[char_index+1] in VALID_OPERATORS:
-                print("\n~~~~~~~ERROR: Invalid value to the right of '(' :/ ~~~~~~~~\n")
+                print(INVALID_VALUE_RIGHT_OPEN_PAR)
                 return False
             if char_index != 0:
                 if instructions[char_index-1] in VALID_DIGITS:
-                    print("\n~~~~~~~ERROR: Invalid value to the left of '(' :/ ~~~~~~~~\n")
+                    print(INVALID_VALUE_LEFT_OPEN_PAR)
                     return False
 
         elif instructions[char_index] == ")":
             if instructions[char_index-1] in VALID_OPERATORS:
-                print("\n~~~~~~~ERROR: Invalid value to the left of ')' :/ ~~~~~~~~\n")
+                print(INVALID_VALUE_LEFT_CLOSING_PAR)
                 return False
             elif char_index != len(instructions) - 1:
                 if instructions[char_index+1] in VALID_DIGITS:
-                    print("\n~~~~~~~ERROR: Invalid value to the right of ')' :/ ~~~~~~~~\n")
+                    print(INVALID_VALUE_RIGHT_CLOSING_PAR)
                     return False
     return True
             
@@ -152,7 +146,7 @@ def reduce_members(list_calculus):
                     print("Reduced_member: "+str(list_calculus)+"\n")
                     break
                 else:
-                    print('Not priority operation. Check next ...')
+                    print(PRIORITY_MESSAGE)
                     pass
         else:
             for operator_index in range(1,len(list_calculus),2):
@@ -204,9 +198,9 @@ def menu():
     while True:
         # Always visibility of application name
         if counter%2 == 0:
-            banner("termycalculator: Calculator of simple expressions", "T", "T")
+            banner(APP_TITLE, "T", "T")
             # print("   Look out!: Don't leave any spaces in your expression :/   ")
-        banner("OPTIONS: (1) Insert expression | (2) Help | (3) Quit", "‾", "_")
+        banner(APP_OPTIONS, "‾", "_")
            
         user_choice = input("\nPlease select an option: ")
         
@@ -245,7 +239,7 @@ def menu():
             pass
                 
         elif user_choice == "3":
-            banner("termycalculator finished by user", 'x', 'x')
+            banner(APP_FINISHED, 'x', 'x')
             sys.exit()
         else:
             print(INVALID_CHOICE)

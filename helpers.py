@@ -1,3 +1,14 @@
+APP_TITLE =                 " TERMYCALCULATOR: Calculator of simple expressions (+-*/:) "
+APP_OPTIONS =               " OPTIONS:  (1) Insert expression  |  (2) Help  |  (3) Quit "
+APP_FINISHED =              "          TERMYCALCULATOR finished by user  )+-*/:(        "
+
+VALID_OPERATORS="+-:/*"
+VALID_DIGITS="0123456789"
+PRIORITY_OPERATORS="/*:"
+PARENTHESIS_SIMBOLS = "()"
+
+PRIORITY_MESSAGE = 'Not priority operation. Check next ................................'
+
 TROLL_FACE = "\
 000000000000000                             000000000000000000000\n\
 0000000000000   00000000000000000000000000         00000000000000\n\
