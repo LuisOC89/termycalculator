@@ -35,8 +35,8 @@ Ex: `1  /  2` is going to be considered as `1/2`.
 1. Download this project and unzip it in the folder of your preference.
 2. Using [bash](https://git-scm.com/downloads) or other program of your preference (with python previously installed)
 access the project's folder.
-3. Enter on bash terminal: `python interface.py`.
+3. Enter on bash terminal: `python main.py`.
 
 ### --see-steps option
 This is an option to see all the steps the calculator goes through while processing a valid expression.
-You can activate it by entering on bash terminal: `python interface.py --see-steps` instead of `python interface.py`.
+You can activate it by entering on bash terminal: `python main.py --see-steps` instead of `python main.py`.
