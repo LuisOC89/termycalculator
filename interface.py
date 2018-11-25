@@ -2,6 +2,7 @@
 # interface.py
 
 import sys
+import argparse
 
 from utils.helpers import APP_TITLE, APP_OPTIONS, APP_FINISHED
 from utils.errors import INVALID_CHOICE
@@ -14,14 +15,13 @@ def banner(text, icon_upper=None, icon_lower=None):
     row_lower = "   \n" + icon_lower * (len(text) + 6) if icon_lower else ""
     print(row_upper+ "   " + text + row_lower)
 
-def menu():
+def menu(see_steps):
     '''User interface'''
     counter = 0
     while True:
         # Always visibility of application name
         if counter%2 == 0:
             banner(APP_TITLE, "T", "T")
-            # print("   Look out!: Don't leave any spaces in your expression :/   ")
         banner(APP_OPTIONS, "‾", "_")
            
         user_choice = input("\nPlease select an option: ")
@@ -51,8 +51,8 @@ def menu():
                 if not validator:
                     break
                 
-                calculus = make_list(math_instructions)
-                result=calculate(calculus)
+                calculus = make_list(math_instructions, see_steps)
+                result=calculate(calculus, see_steps)
                 if result == "Infinite":
                     break
 
@@ -72,4 +72,11 @@ def menu():
         input("Press Enter to continue...\n")
 
 if __name__=="__main__":
-    menu()
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--see-steps", help="Being able how the program goes through each step", action="store_true")
+    args = parser.parse_args()
+
+    see_steps_on = args.see_steps
+
+    menu(see_steps_on)
