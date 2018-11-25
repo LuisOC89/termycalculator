@@ -88,4 +88,4 @@ def checking_division_by_0(dividend, divisor):
     else: 
         print(TROLL_FACE)
         print(DIVISION_BY_ZERO)
-        return False
+        return "Infinite"
