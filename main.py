@@ -7,7 +7,7 @@ import argparse
 from utils.helpers import APP_TITLE, APP_OPTIONS, APP_FINISHED
 from utils.errors import INVALID_CHOICE, NO_EXPRESSION
 from utils.validation import check_valid_values, check_surroundings_VALID_OPERATORS, check_first_last_values, check_no_empty_parenthesis, check_equal_open_close_parenthesis, check_surroundings_and_order_parenthesis
-from process_expression import make_list, calculate
+from utils.process_expression import make_list, calculate
 from utils.help_guide_user import SCOPE, EXAMPLES, SEE_STEPS_OPTION
 
 def banner(text, icon_upper=None, icon_lower=None):
