@@ -4,7 +4,8 @@
 
 import sys
 
-from helpers import troll_face
+from helpers import TROLL_FACE
+from errors import *
 
 ACCEPTED_RESPONSES=["y", "Y", "n", "N"]
 VALID_OPERATORS="+-:/*"
@@ -113,7 +114,7 @@ def make_list(instructions):
         if char_index == len(instructions) - 1 :
             if instructions[index:len(instructions)] != '':
                 list_calculus.append(int(instructions[index:len(instructions)]))
-    print("List_calculus: "+str(list_calculus))
+    print("\nList_terms: "+str(list_calculus)+"\n")
     return list_calculus
 
 def make_operation(number1, number2, operator):
@@ -122,8 +123,8 @@ def make_operation(number1, number2, operator):
         if number2 != 0 :
             reduced_member = number1/number2  
         else: 
-            print(troll_face)
-            print("\n~~~~~~~ERROR: Divisions by 0 are INFINITEEEEEE :/ ~~~~~~~~\n")
+            print(TROLL_FACE)
+            print(DIVISION_BY_ZERO)
             menu()
     elif operator == "*" :
         reduced_member = number1*number2
@@ -148,7 +149,7 @@ def reduce_members(list_calculus):
                     temp = make_operation(list_calculus[operator_index-1],list_calculus[operator_index+1],list_calculus[operator_index])
                     list_calculus[operator_index-1] = temp
                     del list_calculus[operator_index:operator_index+1+1] # Plus extra, sublist structure: [initial:final)
-                    print("List_reduced: "+str(list_calculus))
+                    print("Reduced_member: "+str(list_calculus)+"\n")
                     break
                 else:
                     print('Not priority operation. Check next ...')
@@ -161,7 +162,7 @@ def reduce_members(list_calculus):
                 temp = make_operation(list_calculus[operator_index-1],list_calculus[operator_index+1],list_calculus[operator_index])
                 list_calculus[operator_index-1] = temp
                 del list_calculus[operator_index:operator_index+1+1] # Plus extra, sublist structure: [initial:final)
-                print("List_reduced: "+str(list_calculus))
+                print("Reduced_member: "+str(list_calculus)+"\n")
                 break
         if len(list_calculus) == 1:
             return list_calculus[0]
@@ -184,12 +185,12 @@ def calculate(main_list):
                     temp = reduce_members(main_list[start_parenthesis+1:end_parenthesis])
                     main_list[start_parenthesis] = temp
                     del main_list[start_parenthesis+1:end_parenthesis+1] # Plus extra, sublist structure: [initial:final)
-                    print("List_calculate h: "+str(main_list)) # h is just iindicator to identify when there is a parenthesis
+                    print("Main_remaining_list_terms: "+str(main_list)+"\n") # h is just iindicator to identify when there was a parenthesis
                     break
             else:
                 main_list = reduce_members(main_list)
-                print("List_calculate j: "+str(main_list))
-                print("Type List_calculate j: "+str(type(main_list))) # j is just iindicator to identify when there is not a parenthesis
+                print("Final exact result: "+str(main_list)) # This is supposed to happen when there is just one term
+                print("Type final result: {}\n".format(str(type(main_list)))) 
                 if str(type(main_list)) == "<class 'int'>":
                     return main_list
                 elif str(type(main_list)) == "<class 'float'>":
@@ -211,7 +212,8 @@ def menu():
         
         if user_choice == "1":
             while True:
-                math_expressions = input(" Calculate this: ")
+                math_expressions = input("Calculate this: ")
+                print("")
                 math_instructions = math_expressions.replace(" ", "")
                 validator = check_valid_values(math_instructions) 
                 if not validator:
@@ -233,11 +235,10 @@ def menu():
                     break
                 
                 calculus = make_list(math_instructions)
-                print("List: {}".format(calculus))
                 
                 result=calculate(calculus)
 
-                print("Final result: {}".format(result))
+                print("Results: {}".format(result))
                 break
 
         elif user_choice == "2":
@@ -247,10 +248,10 @@ def menu():
             banner("termycalculator finished by user", 'x', 'x')
             sys.exit()
         else:
-            print("\n~~~~~~~ERROR: Invalid choice :/, try again~~~~~~~\n")
+            print(INVALID_CHOICE)
         
         counter += 1
-        input("Press Enter to continue...")
+        input("Press Enter to continue...\n")
 
 if __name__=="__main__":
     menu()

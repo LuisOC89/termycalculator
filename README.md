@@ -18,17 +18,20 @@ access the project's folder.
 
 ### Examples:
 `Calculate this: 12+34/2+1+2*5-30`  
-`Result: 10.0`  
+`Results: 10.0`  
   
 `Calculate this: 1 2 + 4     4`  
-`Result: 56`
+`Results: 56`
 
 `Calculate this: (((12+3/(4/5))-32)+5)`  
-`Result: -11.25`
+`Results: -11.25`
 
 `Calculate this: 23+(1)+6+(87)-32/(9*5)`  
-`Result: 116.29`
+`Results: 116.29`
+
+`Calculate this: 8-9+67*1/2-40+(54*1/2-3+(45-2))`
+`Results: 59.5`
 
 ##### Division by zero  
 `Calculate this: 12+32/(1-1)`  
-`Result: Surprise? Check yourself`
+`Results: Surprise? Check yourself`
