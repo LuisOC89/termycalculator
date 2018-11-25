@@ -1,5 +1,4 @@
-from interface import menu
-
+# from interface import menu
 from utils.helpers import VALID_OPERATORS, VALID_DIGITS, PARENTHESIS_SIMBOLS, TROLL_FACE
 from utils.errors import *
 
@@ -89,4 +88,4 @@ def checking_division_by_0(dividend, divisor):
     else: 
         print(TROLL_FACE)
         print(DIVISION_BY_ZERO)
-        menu()
+        return False
