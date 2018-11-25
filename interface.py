@@ -151,6 +151,7 @@ def reduce_members(list_calculus):
                     print("List_reduced: "+str(list_calculus))
                     break
                 else:
+                    print('Not priority operation. Check next ...')
                     pass
         else:
             for operator_index in range(1,len(list_calculus),2):
@@ -200,7 +201,7 @@ def menu():
     '''User interface'''
     counter = 0
     while True:
-        # Always visibility of application name and limitations (PSQL)
+        # Always visibility of application name
         if counter%2 == 0:
             banner("termycalculator: Calculator of simple expressions", "T", "T")
             # print("   Look out!: Don't leave any spaces in your expression :/   ")
@@ -237,6 +238,7 @@ def menu():
                 result=calculate(calculus)
 
                 print("Final result: {}".format(result))
+                break
 
         elif user_choice == "2":
             pass
